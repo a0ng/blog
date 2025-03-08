@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quirky Blog</title>
+    <style>
+        /* Global Styles with updated colors */
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #1d1b4b;
+            color: #f5f3e6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 3px dotted #f5f3e6;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #f5f3e6;
+            margin: 0;
+            letter-spacing: -1px;
+            transform: rotate(-1deg);
+            display: inline-block;
+        }
+        
+        nav {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav li {
+            margin: 10px;
+            position: relative;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #f5f3e6;
+            font-weight: bold;
+            padding: 5px 15px;
+            border: 2px solid #f5f3e6;
+            border-radius: 20px;
+            transition: all 0.3s;
+            display: inline-block;
+            transform: rotate(1deg);
+        }
+        
+        nav a:hover {
+            background-color: #f5f3e6;
+            color: #1d1b4b;
+            transform: rotate(-1deg) scale(1.1);
+        }
+        
+        .active {
+            background-color: #f5f3e6;
+            color: #1d1b4b;
+        }
+        
+        main {
+            min-height: 500px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        article {
+            background-color: #2d2a6e;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 0px #f5f3e6;
+            position: relative;
+        }
+        
+        article::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border: 2px dashed #f5f3e6;
+            border-radius: 12px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        h2 {
+            color: #f5f3e6;
+            border-bottom: 2px dotted #f5f3e6;
+            padding-bottom: 5px;
+        }
+        
+        .post-date {
+            font-size: 0.8rem;
+            color: #ccc;
+            font-style: italic;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 3px dotted #f5f3e6;
+            font-size: 0.9rem;
+        }
+        
+        /* Home Page Styles */
+        .featured-work {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .work-item {
+            background: #2d2a6e;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px #f5f3e6;
+        }
+        
+        /* Research Page Styles */
+        .inspiration-list {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        
+        .inspiration-list li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .inspiration-list li::before {
+            content: "✧";
+            position: absolute;
+            left: 0;
+            color: #f5f3e6;
+        }
+        
+        .inspiration-list a {
+            color: #a9a6ff;
+            text-decoration: none;
+        }
+        
+        .inspiration-list a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Archive Page Styles */
+        .archive-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .archive-list li {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dotted #f5f3e6;
+        }
+        
+        .archive-year {
+            font-weight: bold;
+            color: #f5f3e6;
+            margin-top: 30px;
+        }
+        
+        /* Binary Notebook Styles */
+        .binary-container {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #0f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .binary-text {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        /* Quirky elements */
+        .quirky-element {
+            position: fixed;
+            font-size: 4rem;
+            opacity: 0.15;
+            z-index: -1;
+            color: #f5f3e6;
+            transform: rotate(10deg);
+        }
+        
+        .quirky-1 {
+            top: 15%;
+            left: 5%;
+        }
+        
+        .quirky-2 {
+            bottom: 10%;
+            right: 7%;
+        }
+    </style>
+</head>
+<body>
+    <div class="quirky-element quirky-1">✧</div>
+    <div class="quirky-element quirky-2">✦</div>
+    
+    <div class="container">
+        <header>
+            <h1>Quirky Blog</h1>
+            <p>A wonderfully strange collection of thoughts and ideas</p>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#" id="home-link" class="active">Home</a></li>
+                <li><a href="#" id="research-link">Research</a></li>
+                <li><a href="#" id="archive-link">Archive</a></li>
+                <li><a href="#" id="binary-link">Binary Notebook</a></li>
+            </ul>
+        </nav>
+        
+        <main id="main-content">
+            <!-- Home Page Content (shown by default) -->
+            <section id="home-content">
+                <h2>Current Work</h2>
+                <div class="featured-work">
+                    <div class="work-item">
+                        <h3>Project Alpha</h3>
+                        <p class="post-date">March 5, 2025</p>
+                        <p>An exploration of quirky design elements and how they affect user perception. This project combines visual aesthetics with cognitive psychology.</p>
+                    </div>
+                    <div class="work-item">
+                        <h3>The Dotted Line</h3>
+                        <p class="post-date">February 28, 2025</p>
+                        <p>A series of interconnected thoughts about the spaces between creativity and logic. Sometimes the most interesting ideas live on the dotted line.</p>
+                    </div>
+                    <div class="work-item">
+                        <h3>Patterns Unseen</h3>
+                        <p class="post-date">February 15, 2025</p>
+                        <p>Looking at the hidden patterns that shape our digital experiences. What makes some designs feel more natural than others?</p>
+                    </div>
+                </div>
+                
+                <article>
+                    <h2>Latest Thoughts</h2>
+                    <p class="post-date">March 7, 2025</p>
+                    <p>I've been thinking about the intersection of digital art and traditional media. There's something magical about bringing these worlds together - the precision of digital tools with the unpredictability of analog methods.</p>
+                    <p>Yesterday I experimented with printing digital designs onto handmade paper. The results were unexpected and delightful. The imperfections in the paper created interesting textures that couldn't be replicated digitally.</p>
+                    <p>More experiments to come!</p>
+                </article>
+            </section>
+            
+            <!-- Research Page Content (hidden by default) -->
+            <section id="research-content" style="display: none;">
+                <h2>Research & Inspiration</h2>
+                <article>
+                    <h3>Writing Inspiration</h3>
+                    <p>A collection of sources that fuel my creative process:</p>
+                    <ul class="inspiration-list">
+                        <li><a href="#">The Patterns of Nature</a> - How natural systems inform design</li>
+                        <li><a href="#">Digital Frontiers Journal</a> - Exploring the edges of technology</li>
+                        <li><a href="#">Typography in Motion</a> - The linguistics of visual communication</li>
+                        <li><a href="#">Architectural Whispers</a> - Spaces that speak volumes</li>
+                        <li><a href="#">Folklore in Modern Context</a> - Ancient stories in new media</li>
+                    </ul>
+                </article>
+                
+                <article>
+                    <h3>Current Research Questions</h3>
+                    <p>I'm currently exploring these questions in my work:</p>
+                    <ul class="inspiration-list">
+                        <li>How do sensory experiences translate across different media formats?</li>
+                        <li>What makes certain visual patterns more memorable than others?</li>
+                        <li>Can digital spaces evoke the same emotional responses as physical ones?</li>
+                        <li>How does the typography of a text affect our understanding of its content?</li>
+                    </ul>
+                </article>
+            </section>
+            
+            <!-- Archive Page Content (hidden by default) -->
+            <section id="archive-content" style="display: none;">
+                <h2>Archive</h2>
+                
+                <h3 class="archive-year">2025</h3>
+                <ul class="archive-list">
+                    <li>
+                        <h4>The Digital Canvas Reimagined</h4>
+                        <p class="post-date">January 18, 2025</p>
+                        <p>Exploring new ways to think about digital spaces as creative canvases.</p>
+                    </li>
+                    <li>
+                        <h4>Thoughts on Interactive Storytelling</h4>
+                        <p class="post-date">January 5, 2025</p>
+                        <p>How user interactions can shape narrative experiences in unexpected ways.</p>
+                    </li>
+                </ul>
+                
+                <h3 class="archive-year">2024</h3>
+                <ul class="archive-list">
+                    <li>
+                        <h4>The Quirky Design Manifesto</h4>
+                        <p class="post-date">December 12, 2024</p>
+                        <p>My thoughts on embracing imperfection and personality in design.</p>
+                    </li>
+                    <li>
+                        <h4>Breaking Pattern: When Rules Should Be Broken</h4>
+                        <p class="post-date">November 27, 2024</p>
+                        <p>A study of successful rule-breaking in design and art.</p>
+                    </li>
+                    <li>
+                        <h4>The Space Between: Margins and Meaning</h4>
+                        <p class="post-date">October 15, 2024</p>
+                        <p>How negative space shapes our perception of content.</p>
+                    </li>
+                </ul>
+                
+                <h3 class="archive-year">2023</h3>
+                <ul class="archive-list">
+                    <li>
+                        <h4>Digital Textures and Tactile Screens</h4>
+                        <p class="post-date">December 3, 2023</p>
+                        <p>Can we create digital experiences that feel physical?</p>
+                    </li>
+                    <li>
+                        <h4>The Evolution of Personal Blogs</h4>
+                        <p class="post-date">September 20, 2023</p>
+                        <p>Looking at how personal websites have changed over two decades.</p>
+                    </li>
+                </ul>
+            </section>
+            
+            <!-- Binary Notebook Page Content (hidden by default) -->
+            <section id="binary-content" style="display: none;">
+                <h2>Binary Notebook</h2>
+                <article>
+                    <p>Welcome to my digital stream of consciousness. This is where I collect bits and fragments of code, ideas, and digital experiments.</p>
+                    
+                    <div class="binary-container">
+                        <div class="binary-text">
+01010111 01100101 01101100 01100011 01101111 01101101 01100101 00100000 01110100 01101111 00100000 01101101 01111001 00100000 01100010 01101001 01101110 01100001 01110010 01111001 00100000 01101110 01101111 01110100 01100101 01100010 01101111 01101111 01101011 00101110 00100000 01001001 01100100 01100101 01100001 01110011 00100000 01100110 01101111 01110010 01101101 00100000 01101000 01100101 01110010 01100101 00101110
+
+// Fragment of thought from 03.02.2025
+function createPattern(size) {
+  let pattern = [];
+  for (let i = 0; i < size; i++) {
+    let row = [];
+    for (let j = 0; j < size; j++) {
+      row.push((i+j) % 2 === 0 ? '✧' : '✦');
+    }
+    pattern.push(row);
+  }
+  return pattern;
+}
+
+/* 
+   Sometimes I wonder if code itself 
+   is a form of poetry. Each function
+   a verse, each loop a chorus.
+*/
+
+01001001 01100100 01100101 01100001 01110011 00100000 01100110 01101111 01110010 00100000 01100110 01110101 01110100 01110101 01110010 01100101 00100000 01100101 01111000 01110000 01101100 01101111 01110010 01100001 01110100 01101001 01101111 01101110 01110011 00111010
+- Interactive typography experiments
+- Sound-reactive visual patterns
+- Collaborative digital spaces
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2025 Quirky Blog | Made with curiosity and coffee</p>
+            <p><small>Updated on March 8, 2025</small></p>
+        </footer>
+    </div>
+    
+    <script>
+        // Fixed navigation script with home page functionality
+        document.getElementById('home-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            hideAllSections();
+            document.getElementById('home-content').style.display = 'block';
+            setActiveLink(this);
+        });
+        
+        document.getElementById('research-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            hideAllSections();
+            document.getElementById('research-content').style.display = 'block';
+            setActiveLink(this);
+        });
+        
+        document.getElementById('archive-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            hideAllSections();
+            document.getElementById('archive-content').style.display = 'block';
+            setActiveLink(this);
+        });
+        
+        document.getElementById('binary-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            hideAllSections();
+            document.getElementById('binary-content').style.display = 'block';
+            setActiveLink(this);
+        });
+        
+        function hideAllSections() {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('research-content').style.display = 'none';
+            document.getElementById('archive-content').style.display = 'none';
+            document.getElementById('binary-content').style.display = 'none';
+        }
+        
+        function setActiveLink(clickedLink) {
+            // Remove active class from all links
+            var links = document.querySelectorAll('nav a');
+            links.forEach(function(link) {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to clicked link
+            clickedLink.classList.add('active');
+        }
+    </script>
+</body>
+</html>
