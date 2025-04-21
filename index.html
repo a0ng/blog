@@ -1,448 +1,253 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quirky Blog</title>
-    <style>
-        /* Global Styles with updated colors */
-        body {
-            font-family: 'Courier New', monospace;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #1d1b4b;
-            color: #f5f3e6;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 0;
-            border-bottom: 3px dotted #f5f3e6;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            color: #f5f3e6;
-            margin: 0;
-            letter-spacing: -1px;
-            transform: rotate(-1deg);
-            display: inline-block;
-        }
-        
-        nav {
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        nav li {
-            margin: 10px;
-            position: relative;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: #f5f3e6;
-            font-weight: bold;
-            padding: 5px 15px;
-            border: 2px solid #f5f3e6;
-            border-radius: 20px;
-            transition: all 0.3s;
-            display: inline-block;
-            transform: rotate(1deg);
-        }
-        
-        nav a:hover {
-            background-color: #f5f3e6;
-            color: #1d1b4b;
-            transform: rotate(-1deg) scale(1.1);
-        }
-        
-        .active {
-            background-color: #f5f3e6;
-            color: #1d1b4b;
-        }
-        
-        main {
-            min-height: 500px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        article {
-            background-color: #2d2a6e;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 5px 5px 0px #f5f3e6;
-            position: relative;
-        }
-        
-        article::before {
-            content: "";
-            position: absolute;
-            top: -5px;
-            left: -5px;
-            right: -5px;
-            bottom: -5px;
-            border: 2px dashed #f5f3e6;
-            border-radius: 12px;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        h2 {
-            color: #f5f3e6;
-            border-bottom: 2px dotted #f5f3e6;
-            padding-bottom: 5px;
-        }
-        
-        .post-date {
-            font-size: 0.8rem;
-            color: #ccc;
-            font-style: italic;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            border-top: 3px dotted #f5f3e6;
-            font-size: 0.9rem;
-        }
-        
-        /* Home Page Styles */
-        .featured-work {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        
-        .work-item {
-            background: #2d2a6e;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 3px 3px 0px #f5f3e6;
-        }
-        
-        /* Research Page Styles */
-        .inspiration-list {
-            list-style-type: none;
-            padding-left: 10px;
-        }
-        
-        .inspiration-list li {
-            margin-bottom: 10px;
-            padding-left: 20px;
-            position: relative;
-        }
-        
-        .inspiration-list li::before {
-            content: "✧";
-            position: absolute;
-            left: 0;
-            color: #f5f3e6;
-        }
-        
-        .inspiration-list a {
-            color: #a9a6ff;
-            text-decoration: none;
-        }
-        
-        .inspiration-list a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Archive Page Styles */
-        .archive-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        
-        .archive-list li {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px dotted #f5f3e6;
-        }
-        
-        .archive-year {
-            font-weight: bold;
-            color: #f5f3e6;
-            margin-top: 30px;
-        }
-        
-        /* Binary Notebook Styles */
-        .binary-container {
-            font-family: 'Courier New', monospace;
-            background-color: #000;
-            color: #0f0;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
-        
-        .binary-text {
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        
-        /* Quirky elements */
-        .quirky-element {
-            position: fixed;
-            font-size: 4rem;
-            opacity: 0.15;
-            z-index: -1;
-            color: #f5f3e6;
-            transform: rotate(10deg);
-        }
-        
-        .quirky-1 {
-            top: 15%;
-            left: 5%;
-        }
-        
-        .quirky-2 {
-            bottom: 10%;
-            right: 7%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Availability Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #4a4a4a;
+      margin-bottom: 20px;
+    }
+    .instructions {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #f0f8ff;
+      border-radius: 5px;
+    }
+    .grid-container {
+      display: grid;
+      grid-template-columns: 80px repeat(6, 1fr);
+      gap: 1px;
+    }
+    .grid-header {
+      text-align: center;
+      font-weight: bold;
+      padding: 8px;
+      background-color: #e9e9e9;
+    }
+    .time-slot {
+      text-align: right;
+      padding: 8px;
+      background-color: #f5f5f5;
+    }
+    .availability-cell {
+      cursor: pointer;
+      background-color: #eeeeee;
+      transition: background-color 0.2s;
+      border: 1px solid #ddd;
+      min-height: 30px;
+    }
+    .availability-cell.special-time {
+      background-color: #ffe8cc;
+    }
+    .available {
+      background-color: #a1d490;
+    }
+    .message-box {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f5f5f5;
+      border-radius: 5px;
+      border-left: 4px solid #a9a9a9;
+      display: none;
+      font-style: italic;
+      color: #555;
+    }
+    .submit-btn {
+      display: block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      background-color: #4a86e8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .submit-btn:hover {
+      background-color: #3a76d8;
+    }
+    .special-message {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff3e0;
+      border-radius: 5px;
+      border-left: 4px solid #ff9800;
+      font-style: italic;
+      color: #333;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="quirky-element quirky-1">✧</div>
-    <div class="quirky-element quirky-2">✦</div>
+  <div class="container">
+    <h1>My Weekly Availability</h1>
     
-    <div class="container">
-        <header>
-            <h1>Quirky Blog</h1>
-            <p>A wonderfully strange collection of thoughts and ideas</p>
-        </header>
-        
-        <nav>
-            <ul>
-                <li><a href="#" id="home-link" class="active">Home</a></li>
-                <li><a href="#" id="research-link">Research</a></li>
-                <li><a href="#" id="archive-link">Archive</a></li>
-                <li><a href="#" id="binary-link">Binary Notebook</a></li>
-            </ul>
-        </nav>
-        
-        <main id="main-content">
-            <!-- Home Page Content (shown by default) -->
-            <section id="home-content">
-                <h2>Current Work</h2>
-                <div class="featured-work">
-                    <div class="work-item">
-                        <h3>Project Alpha</h3>
-                        <p class="post-date">March 5, 2025</p>
-                        <p>An exploration of quirky design elements and how they affect user perception. This project combines visual aesthetics with cognitive psychology.</p>
-                    </div>
-                    <div class="work-item">
-                        <h3>The Dotted Line</h3>
-                        <p class="post-date">February 28, 2025</p>
-                        <p>A series of interconnected thoughts about the spaces between creativity and logic. Sometimes the most interesting ideas live on the dotted line.</p>
-                    </div>
-                    <div class="work-item">
-                        <h3>Patterns Unseen</h3>
-                        <p class="post-date">February 15, 2025</p>
-                        <p>Looking at the hidden patterns that shape our digital experiences. What makes some designs feel more natural than others?</p>
-                    </div>
-                </div>
-                
-                <article>
-                    <h2>Latest Thoughts</h2>
-                    <p class="post-date">March 7, 2025</p>
-                    <p>I've been thinking about the intersection of digital art and traditional media. There's something magical about bringing these worlds together - the precision of digital tools with the unpredictability of analog methods.</p>
-                    <p>Yesterday I experimented with printing digital designs onto handmade paper. The results were unexpected and delightful. The imperfections in the paper created interesting textures that couldn't be replicated digitally.</p>
-                    <p>More experiments to come!</p>
-                </article>
-            </section>
-            
-            <!-- Research Page Content (hidden by default) -->
-            <section id="research-content" style="display: none;">
-                <h2>Research & Inspiration</h2>
-                <article>
-                    <h3>Writing Inspiration</h3>
-                    <p>A collection of sources that fuel my creative process:</p>
-                    <ul class="inspiration-list">
-                        <li><a href="#">The Patterns of Nature</a> - How natural systems inform design</li>
-                        <li><a href="#">Digital Frontiers Journal</a> - Exploring the edges of technology</li>
-                        <li><a href="#">Typography in Motion</a> - The linguistics of visual communication</li>
-                        <li><a href="#">Architectural Whispers</a> - Spaces that speak volumes</li>
-                        <li><a href="#">Folklore in Modern Context</a> - Ancient stories in new media</li>
-                    </ul>
-                </article>
-                
-                <article>
-                    <h3>Current Research Questions</h3>
-                    <p>I'm currently exploring these questions in my work:</p>
-                    <ul class="inspiration-list">
-                        <li>How do sensory experiences translate across different media formats?</li>
-                        <li>What makes certain visual patterns more memorable than others?</li>
-                        <li>Can digital spaces evoke the same emotional responses as physical ones?</li>
-                        <li>How does the typography of a text affect our understanding of its content?</li>
-                    </ul>
-                </article>
-            </section>
-            
-            <!-- Archive Page Content (hidden by default) -->
-            <section id="archive-content" style="display: none;">
-                <h2>Archive</h2>
-                
-                <h3 class="archive-year">2025</h3>
-                <ul class="archive-list">
-                    <li>
-                        <h4>The Digital Canvas Reimagined</h4>
-                        <p class="post-date">January 18, 2025</p>
-                        <p>Exploring new ways to think about digital spaces as creative canvases.</p>
-                    </li>
-                    <li>
-                        <h4>Thoughts on Interactive Storytelling</h4>
-                        <p class="post-date">January 5, 2025</p>
-                        <p>How user interactions can shape narrative experiences in unexpected ways.</p>
-                    </li>
-                </ul>
-                
-                <h3 class="archive-year">2024</h3>
-                <ul class="archive-list">
-                    <li>
-                        <h4>The Quirky Design Manifesto</h4>
-                        <p class="post-date">December 12, 2024</p>
-                        <p>My thoughts on embracing imperfection and personality in design.</p>
-                    </li>
-                    <li>
-                        <h4>Breaking Pattern: When Rules Should Be Broken</h4>
-                        <p class="post-date">November 27, 2024</p>
-                        <p>A study of successful rule-breaking in design and art.</p>
-                    </li>
-                    <li>
-                        <h4>The Space Between: Margins and Meaning</h4>
-                        <p class="post-date">October 15, 2024</p>
-                        <p>How negative space shapes our perception of content.</p>
-                    </li>
-                </ul>
-                
-                <h3 class="archive-year">2023</h3>
-                <ul class="archive-list">
-                    <li>
-                        <h4>Digital Textures and Tactile Screens</h4>
-                        <p class="post-date">December 3, 2023</p>
-                        <p>Can we create digital experiences that feel physical?</p>
-                    </li>
-                    <li>
-                        <h4>The Evolution of Personal Blogs</h4>
-                        <p class="post-date">September 20, 2023</p>
-                        <p>Looking at how personal websites have changed over two decades.</p>
-                    </li>
-                </ul>
-            </section>
-            
-            <!-- Binary Notebook Page Content (hidden by default) -->
-            <section id="binary-content" style="display: none;">
-                <h2>Binary Notebook</h2>
-                <article>
-                    <p>Welcome to my digital stream of consciousness. This is where I collect bits and fragments of code, ideas, and digital experiments.</p>
-                    
-                    <div class="binary-container">
-                        <div class="binary-text">
-01010111 01100101 01101100 01100011 01101111 01101101 01100101 00100000 01110100 01101111 00100000 01101101 01111001 00100000 01100010 01101001 01101110 01100001 01110010 01111001 00100000 01101110 01101111 01110100 01100101 01100010 01101111 01101111 01101011 00101110 00100000 01001001 01100100 01100101 01100001 01110011 00100000 01100110 01101111 01110010 01101101 00100000 01101000 01100101 01110010 01100101 00101110
-
-// Fragment of thought from 03.02.2025
-function createPattern(size) {
-  let pattern = [];
-  for (let i = 0; i < size; i++) {
-    let row = [];
-    for (let j = 0; j < size; j++) {
-      row.push((i+j) % 2 === 0 ? '✧' : '✦');
-    }
-    pattern.push(row);
-  }
-  return pattern;
-}
-
-/* 
-   Sometimes I wonder if code itself 
-   is a form of poetry. Each function
-   a verse, each loop a chorus.
-*/
-
-01001001 01100100 01100101 01100001 01110011 00100000 01100110 01101111 01110010 00100000 01100110 01110101 01110100 01110101 01110010 01100101 00100000 01100101 01111000 01110000 01101100 01101111 01110010 01100001 01110100 01101001 01101111 01101110 01110011 00111010
-- Interactive typography experiments
-- Sound-reactive visual patterns
-- Collaborative digital spaces
-                        </div>
-                    </div>
-                </article>
-            </section>
-        </main>
-        
-        <footer>
-            <p>© 2025 Quirky Blog | Made with curiosity and coffee</p>
-            <p><small>Updated on March 8, 2025</small></p>
-        </footer>
+    <div class="instructions">
+      <p>Click on the time slots when you're available. Click again to mark as unavailable.</p>
     </div>
     
-    <script>
-        // Fixed navigation script with home page functionality
-        document.getElementById('home-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            hideAllSections();
-            document.getElementById('home-content').style.display = 'block';
-            setActiveLink(this);
-        });
+    <div class="grid-container" id="scheduler">
+      <div class="grid-header">Time</div>
+      <div class="grid-header">Monday</div>
+      <div class="grid-header">Tuesday</div>
+      <div class="grid-header">Wednesday</div>
+      <div class="grid-header">Thursday</div>
+      <div class="grid-header">Friday</div>
+      <div class="grid-header">Saturday</div>
+      
+      <!-- Time slots will be added here by JavaScript -->
+    </div>
+    
+    <div id="message-box" class="message-box"></div>
+    <div id="special-message" class="special-message"></div>
+    
+    <button class="submit-btn" id="check-btn">Check My Schedule</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const scheduler = document.getElementById('scheduler');
+      const messageBox = document.getElementById('message-box');
+      const specialMessage = document.getElementById('special-message');
+      const checkBtn = document.getElementById('check-btn');
+      
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const startHour = 12; // Changed from 9 to 12
+      const endHour = 21;
+      
+      // Create the time grid
+      for (let hour = startHour; hour <= endHour; hour++) {
+        const timeText = hour > 12 ? `${hour - 12}:00 PM` : (hour === 12 ? '12:00 PM' : `${hour}:00 AM`);
         
-        document.getElementById('research-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            hideAllSections();
-            document.getElementById('research-content').style.display = 'block';
-            setActiveLink(this);
-        });
+        const timeSlot = document.createElement('div');
+        timeSlot.className = 'time-slot';
+        timeSlot.textContent = timeText;
+        scheduler.appendChild(timeSlot);
         
-        document.getElementById('archive-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            hideAllSections();
-            document.getElementById('archive-content').style.display = 'block';
-            setActiveLink(this);
-        });
-        
-        document.getElementById('binary-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            hideAllSections();
-            document.getElementById('binary-content').style.display = 'block';
-            setActiveLink(this);
-        });
-        
-        function hideAllSections() {
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('research-content').style.display = 'none';
-            document.getElementById('archive-content').style.display = 'none';
-            document.getElementById('binary-content').style.display = 'none';
-        }
-        
-        function setActiveLink(clickedLink) {
-            // Remove active class from all links
-            var links = document.querySelectorAll('nav a');
-            links.forEach(function(link) {
-                link.classList.remove('active');
+        for (let day = 0; day < days.length; day++) {
+          const cell = document.createElement('div');
+          cell.className = 'availability-cell';
+          
+          // Highlight Saturday 6-9 PM slots as special (day 5, hours 18-21)
+          if (day === 5 && (hour >= 18 && hour <= 21)) {
+            cell.classList.add('special-time');
+          }
+          
+          cell.dataset.day = day;
+          cell.dataset.hour = hour;
+          
+          // For special Saturday evening slots, show a different message
+          if (day === 5 && (hour >= 18 && hour <= 21)) {
+            cell.addEventListener('click', function(e) {
+              e.preventDefault();
+              messageBox.style.display = 'none';
+              specialMessage.textContent = "Actually, I have an exciting plan then, I better not mark it as available.";
+              specialMessage.style.display = 'block';
+              
+              // Hide the message after 3 seconds
+              setTimeout(() => {
+                specialMessage.style.display = 'none';
+              }, 3000);
             });
-            
-            // Add active class to clicked link
-            clickedLink.classList.add('active');
+          } else {
+            cell.addEventListener('click', toggleAvailability);
+          }
+          
+          scheduler.appendChild(cell);
         }
-    </script>
+      }
+      
+      function toggleAvailability(event) {
+        const cell = event.target;
+        cell.classList.toggle('available');
+        specialMessage.style.display = 'none';
+      }
+      
+      // Array of lonely, self-deprecating internal monologue prompts
+      const lonelyThoughts = [
+        "Hmm, {day} at {time}... I'll just be sitting alone in my apartment again.",
+        "{day} {time}? That's when everyone else is probably out having fun together.",
+        "Another empty slot on {day} at {time}. I used to have plans during this time.",
+        "{day} at {time} - I could text someone, but they probably wouldn't respond anyway.",
+        "{day} {time}... I remember when my calendar used to be full of actual plans.",
+        "Nothing for {day} at {time}. Not like anyone would invite me to anything then.",
+        "{day} {time} - that's when I used to meet up with my college friends. They've all moved on.",
+        "Empty {day} at {time}. Maybe I should get a pet just to have someone to come home to.",
+        "{day} {time} is when that show I watch alone every week airs. At least the TV characters feel like friends.",
+        "I could pretend to be busy on {day} at {time}, but who would even ask?",
+        "{day} at {time}? That's when my old friend group meets up now. Without me.",
+        "Empty slot on {day} {time}. I should probably call my parents, it's been weeks.",
+        "{day} at {time} - I used to have a standing coffee date then. Three years ago now.",
+        "My {day} {time} is pathetically empty. As usual.",
+        "Another lonely {day} at {time}. Maybe I'll rewatch that series for the fifth time.",
+        "{day} {time} - I used to have lunch with my high school friends then. Wonder if they ever think of me."
+      ];
+      
+      // Check incomplete schedule and display messages
+      checkBtn.addEventListener('click', function() {
+        specialMessage.style.display = 'none';
+        const cells = document.querySelectorAll('.availability-cell');
+        const unselectedCells = [];
+        
+        cells.forEach(cell => {
+          if (!cell.classList.contains('available')) {
+            const day = parseInt(cell.dataset.day);
+            const hour = parseInt(cell.dataset.hour);
+            
+            // Skip Saturday 6-9 PM (day 5, hours 18-21)
+            if (!(day === 5 && hour >= 18 && hour <= 21)) {
+              unselectedCells.push({
+                day: day,
+                hour: hour
+              });
+            }
+          }
+        });
+        
+        if (unselectedCells.length === 0) {
+          messageBox.textContent = "I've marked every slot as available... who am I kidding? No one's going to invite me to anything anyway. At least I have Saturday night.";
+          messageBox.style.display = 'block';
+          return;
+        }
+        
+        // Pick a random unselected cell to ask about
+        const randomIndex = Math.floor(Math.random() * unselectedCells.length);
+        const cell = unselectedCells[randomIndex];
+        const dayName = days[cell.day];
+        const hourText = cell.hour > 12 ? `${cell.hour - 12}:00 PM` : (cell.hour === 12 ? '12:00 PM' : `${cell.hour}:00 AM`);
+        
+        // Pick a random prompt and fill in the details
+        const promptIndex = Math.floor(Math.random() * lonelyThoughts.length);
+        let prompt = lonelyThoughts[promptIndex]
+          .replace('{day}', dayName)
+          .replace('{time}', hourText);
+        
+        messageBox.textContent = prompt;
+        messageBox.style.display = 'block';
+        
+        // Highlight the cell being asked about
+        cells.forEach(c => c.style.border = '1px solid #ddd');
+        const targetCell = document.querySelector(`.availability-cell[data-day="${cell.day}"][data-hour="${cell.hour}"]`);
+        targetCell.style.border = '2px solid #808080';
+      });
+    });
+  </script>
 </body>
 </html>
