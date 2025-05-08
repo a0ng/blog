@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tinder-Style Swiping Game</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .nav-links {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .nav-links a {
+        color: #4a86e8;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+
+      .container {
+        max-width: 300px;
+        width: 300px;
+        margin: 20px auto;
+        flex-grow: 1;
+      }
+
+      .card-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .card {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+        transition: transform 0.3s;
+      }
+
+      .card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .card-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+        color: white;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .button {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .dislike {
+        background-color: #ff4458;
+        color: white;
+      }
+
+      .like {
+        background-color: #26de81;
+        color: white;
+      }
+
+      .chat-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        z-index: 1000;
+        flex-direction: column;
+      }
+
+      .chat-header {
+        padding: 20px;
+        background: #ff4458;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .chat-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .chat-messages {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .chat-input {
+        padding: 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        outline: none;
+      }
+
+      .chat-input button {
+        padding: 10px 20px;
+        background: #ff4458;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      .back-button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 20px;
+        padding: 10px;
+      }
+
+      .score-display {
+        text-align: center;
+        font-size: 24px;
+        color: #4a4a4a;
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        opacity: 0;
+        z-index: 1500;
+        transition: opacity 3s ease;
+      }
+
+      .achievement {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 20px 40px;
+        border-radius: 10px;
+        text-align: center;
+        z-index: 2000;
+        animation: fadeIn 1.5s;
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay" id="overlay"></div>
+    <div class="nav-links">
+      <a href="index.html">Availability Scheduler</a>
+      <a href="memory.html">Memory Lane</a>
+      <a href="tinder.html">The Game</a>
+    </div>
+
+    <div class="achievement" id="achievement">
+      <h2>You completed the game.</h2>
+      <p>Final Score: 250</p>
+    </div>
+
+    <div class="container">
+      <div class="score-display">Score: <span id="score">0</span></div>
+      <div class="card-container" id="cardContainer">
+        <!-- Cards will be added here dynamically -->
+      </div>
+      <div class="buttons">
+        <button class="button dislike" onclick="handleDislike()">✕</button>
+        <button class="button like" onclick="handleLike()">♥</button>
+      </div>
+    </div>
+
+    <div class="chat-container" id="chatContainer">
+      <div class="chat-header">
+        <button class="back-button" onclick="closeChat()">←</button>
+        <img id="chatProfilePic" src="" alt="Profile" />
+        <span id="chatName"></span>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <script>
+      // Sample data for profile cards
+      const profiles = [
+        {
+          name: "Sarah",
+          age: 22,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Elaine",
+          age: 26,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Emma",
+          age: 21,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Lisa",
+          age: 24,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Anna",
+          age: 20,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Beth",
+          age: 23,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Cara",
+          age: 25,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Dana",
+          age: 21,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Eva",
+          age: 24,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Fiona",
+          age: 22,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Gina",
+          age: 26,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Holly",
+          age: 20,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Ivy",
+          age: 23,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Jade",
+          age: 25,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Kara",
+          age: 21,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Lila",
+          age: 24,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Mona",
+          age: 22,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Nina",
+          age: 26,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Olga",
+          age: 20,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Paula",
+          age: 23,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Quinn",
+          age: 25,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Rita",
+          age: 21,
+          image: "woman_silhouette.jpg",
+        },
+        {
+          name: "Leann",
+          age: 22,
+          image: "pink_silhouette.png",
+        },
+        {
+          name: "Sophie",
+          age: 24,
+          image: "woman_silhouette.jpg",
+        },
+      ];
+
+      let currentProfileIndex = 0;
+      let currentCard = null;
+      let startX = 0;
+      let currentX = 0;
+      let score = 0;
+
+      // Initialize the first card
+      function initializeCards() {
+        showNextProfile();
+      }
+
+      function createCard(profile) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+                <img src="${profile.image}" alt="${profile.name}" draggable="false">
+                <div class="card-info">
+                    <h2>${profile.name}, ${profile.age}</h2>
+                </div>
+            `;
+
+        // Add touch/mouse event listeners
+        card.addEventListener("mousedown", startDragging);
+        card.addEventListener("touchstart", startDragging);
+        card.addEventListener("mousemove", drag);
+        card.addEventListener("touchmove", drag);
+        card.addEventListener("mouseup", endDragging);
+        card.addEventListener("touchend", endDragging);
+        card.addEventListener("mouseleave", endDragging);
+
+        // Prevent default drag behavior
+        card
+          .querySelector("img")
+          .addEventListener("dragstart", (e) => e.preventDefault());
+
+        return card;
+      }
+
+      function showNextProfile() {
+        if (currentProfileIndex >= profiles.length) {
+          currentProfileIndex = 0; // Reset to start
+        }
+
+        const cardContainer = document.getElementById("cardContainer");
+        cardContainer.innerHTML = "";
+
+        const profile = profiles[currentProfileIndex];
+        currentCard = createCard(profile);
+        cardContainer.appendChild(currentCard);
+      }
+
+      function startDragging(e) {
+        startX = e.type === "mousedown" ? e.clientX : e.touches[0].clientX;
+        currentX = startX;
+        if (currentCard) {
+          currentCard.style.transition = "none";
+        }
+      }
+
+      function drag(e) {
+        if (startX === 0) return;
+
+        e.preventDefault();
+        currentX = e.type === "mousemove" ? e.clientX : e.touches[0].clientX;
+        const diffX = currentX - startX;
+
+        if (currentCard) {
+          currentCard.style.transform = `translateX(${diffX}px) rotate(${
+            diffX * 0.1
+          }deg)`;
+        }
+      }
+
+      function endDragging() {
+        if (startX === 0) return;
+
+        const diffX = currentX - startX;
+        const threshold = 100;
+
+        if (diffX > threshold) {
+          handleLike();
+        } else if (diffX < -threshold) {
+          handleDislike();
+        } else {
+          resetCard();
+        }
+
+        startX = 0;
+        currentX = 0;
+      }
+
+      function resetCard() {
+        if (currentCard) {
+          currentCard.style.transition = "transform 0.3s";
+          currentCard.style.transform = "translateX(0) rotate(0deg)";
+        }
+      }
+
+      function handleLike() {
+        if (currentCard) {
+          const profileName = currentCard
+            .querySelector(".card-info h2")
+            .textContent.split(",")[0];
+          if (profileName === "Leann") {
+            endGameWithMessage("Nice try, you completed the game.");
+            return;
+          }
+          currentCard.style.transition = "transform 0.3s";
+          currentCard.style.transform = "translateX(1000px) rotate(30deg)";
+          updateScore();
+          openChat(profiles[currentProfileIndex]);
+        }
+      }
+
+      function handleDislike() {
+        if (currentCard) {
+          currentCard.style.transition = "transform 0.3s";
+          currentCard.style.transform = "translateX(-1000px) rotate(-30deg)";
+          updateScore();
+          setTimeout(() => {
+            currentProfileIndex++;
+            showNextProfile();
+          }, 300);
+        }
+      }
+
+      function updateScore() {
+        score += 10;
+        document.getElementById("score").textContent = score;
+
+        if (score >= 250) {
+          gameOver();
+        }
+      }
+
+      function gameOver() {
+        // Show and fade in overlay
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        setTimeout(() => {
+          overlay.style.opacity = "1";
+        }, 50);
+
+        // Show achievement after overlay starts fading
+        setTimeout(() => {
+          const achievement = document.getElementById("achievement");
+          achievement.style.display = "block";
+        }, 1500);
+
+        // Disable all game interactions
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button) => {
+          button.disabled = true;
+          button.style.opacity = "0.5";
+        });
+
+        // Remove all card interactions
+        if (currentCard) {
+          currentCard.removeEventListener("mousedown", startDragging);
+          currentCard.removeEventListener("touchstart", startDragging);
+          currentCard.removeEventListener("mousemove", drag);
+          currentCard.removeEventListener("touchmove", drag);
+          currentCard.removeEventListener("mouseup", endDragging);
+          currentCard.removeEventListener("touchend", endDragging);
+          currentCard.removeEventListener("mouseleave", endDragging);
+          currentCard.style.cursor = "default";
+        }
+
+        // Close chat if open
+        document.getElementById("chatContainer").style.display = "none";
+      }
+
+      function openChat(profile) {
+        const chatContainer = document.getElementById("chatContainer");
+        const chatProfilePic = document.getElementById("chatProfilePic");
+        const chatName = document.getElementById("chatName");
+
+        chatProfilePic.src = profile.image;
+        chatName.textContent = profile.name;
+        chatContainer.style.display = "flex";
+      }
+
+      function closeChat() {
+        document.getElementById("chatContainer").style.display = "none";
+        currentProfileIndex++;
+        showNextProfile();
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("messageInput");
+        const message = input.value.trim();
+
+        if (message) {
+          const chatMessages = document.getElementById("chatMessages");
+          const messageElement = document.createElement("div");
+          messageElement.style.marginBottom = "10px";
+          messageElement.style.textAlign = "right";
+          messageElement.innerHTML = `
+                    <div style="background: #ff4458; color: white; padding: 10px; border-radius: 20px; display: inline-block; max-width: 80%;">
+                        ${message}
+                    </div>
+                `;
+          chatMessages.appendChild(messageElement);
+          input.value = "";
+
+          // Simulate response after 1 second
+          setTimeout(() => {
+            const responseElement = document.createElement("div");
+            responseElement.style.marginBottom = "10px";
+            responseElement.innerHTML = `
+                        <div style="background: #eee; padding: 10px; border-radius: 20px; display: inline-block; max-width: 80%;">
+                            Hey there! Thanks for the message! 😊
+                        </div>
+                    `;
+            chatMessages.appendChild(responseElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }, 1000);
+        }
+      }
+
+      function endGameWithMessage(message) {
+        // Show and fade in overlay
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        setTimeout(() => {
+          overlay.style.opacity = "1";
+        }, 50);
+
+        // Show achievement with custom message
+        setTimeout(() => {
+          const achievement = document.getElementById("achievement");
+          achievement.querySelector("h2").textContent = message;
+          achievement.style.display = "block";
+        }, 1500);
+
+        // Disable all game interactions
+        const buttons = document.querySelectorAll(".button");
+        buttons.forEach((button) => {
+          button.disabled = true;
+          button.style.opacity = "0.5";
+        });
+
+        // Remove all card interactions
+        if (currentCard) {
+          currentCard.removeEventListener("mousedown", startDragging);
+          currentCard.removeEventListener("touchstart", startDragging);
+          currentCard.removeEventListener("mousemove", drag);
+          currentCard.removeEventListener("touchmove", drag);
+          currentCard.removeEventListener("mouseup", endDragging);
+          currentCard.removeEventListener("touchend", endDragging);
+          currentCard.removeEventListener("mouseleave", endDragging);
+          currentCard.style.cursor = "default";
+        }
+
+        // Close chat if open
+        document.getElementById("chatContainer").style.display = "none";
+      }
+
+      // Preload images
+      function preloadImages() {
+        profiles.forEach((profile) => {
+          const img = new Image();
+          img.src = profile.image;
+        });
+      }
+
+      // Call preloadImages when the page loads
+      window.onload = function () {
+        initializeCards();
+        preloadImages();
+      };
+    </script>
+  </body>
+</html>

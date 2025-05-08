@@ -1,253 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Availability Scheduler</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f5f5;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #4a4a4a;
-      margin-bottom: 20px;
-    }
-    .instructions {
-      margin-bottom: 20px;
-      padding: 10px;
-      background-color: #f0f8ff;
-      border-radius: 5px;
-    }
-    .grid-container {
-      display: grid;
-      grid-template-columns: 80px repeat(6, 1fr);
-      gap: 1px;
-    }
-    .grid-header {
-      text-align: center;
-      font-weight: bold;
-      padding: 8px;
-      background-color: #e9e9e9;
-    }
-    .time-slot {
-      text-align: right;
-      padding: 8px;
-      background-color: #f5f5f5;
-    }
-    .availability-cell {
-      cursor: pointer;
-      background-color: #eeeeee;
-      transition: background-color 0.2s;
-      border: 1px solid #ddd;
-      min-height: 30px;
-    }
-    .availability-cell.special-time {
-      background-color: #ffe8cc;
-    }
-    .available {
-      background-color: #a1d490;
-    }
-    .message-box {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #f5f5f5;
-      border-radius: 5px;
-      border-left: 4px solid #a9a9a9;
-      display: none;
-      font-style: italic;
-      color: #555;
-    }
-    .submit-btn {
-      display: block;
-      margin: 20px auto 0;
-      padding: 10px 20px;
-      background-color: #4a86e8;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .submit-btn:hover {
-      background-color: #3a76d8;
-    }
-    .special-message {
-      margin-top: 20px;
-      padding: 15px;
-      background-color: #fff3e0;
-      border-radius: 5px;
-      border-left: 4px solid #ff9800;
-      font-style: italic;
-      color: #333;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>My Weekly Availability</h1>
-    
-    <div class="instructions">
-      <p>Click on the time slots when you're available. Click again to mark as unavailable.</p>
-    </div>
-    
-    <div class="grid-container" id="scheduler">
-      <div class="grid-header">Time</div>
-      <div class="grid-header">Monday</div>
-      <div class="grid-header">Tuesday</div>
-      <div class="grid-header">Wednesday</div>
-      <div class="grid-header">Thursday</div>
-      <div class="grid-header">Friday</div>
-      <div class="grid-header">Saturday</div>
-      
-      <!-- Time slots will be added here by JavaScript -->
-    </div>
-    
-    <div id="message-box" class="message-box"></div>
-    <div id="special-message" class="special-message"></div>
-    
-    <button class="submit-btn" id="check-btn">Check My Schedule</button>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Availability Scheduler</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #4a4a4a;
+        margin-bottom: 20px;
+      }
+      .instructions {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #f0f8ff;
+        border-radius: 5px;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: 80px repeat(6, 1fr);
+        gap: 1px;
+      }
+      .grid-header {
+        text-align: center;
+        font-weight: bold;
+        padding: 8px;
+        background-color: #e9e9e9;
+      }
+      .time-slot {
+        text-align: right;
+        padding: 8px;
+        background-color: #f5f5f5;
+      }
+      .availability-cell {
+        cursor: pointer;
+        background-color: #eeeeee;
+        transition: background-color 0.2s;
+        border: 1px solid #ddd;
+        min-height: 30px;
+      }
+      .availability-cell.special-time {
+        background-color: #ffe8cc;
+      }
+      .available {
+        background-color: #a1d490;
+      }
+      .message-box {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        border-left: 4px solid #a9a9a9;
+        display: none;
+        font-style: italic;
+        color: #555;
+      }
+      .submit-btn {
+        display: block;
+        margin: 20px auto 0;
+        padding: 10px 20px;
+        background-color: #4a86e8;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .submit-btn:hover {
+        background-color: #3a76d8;
+      }
+      .special-message {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff3e0;
+        border-radius: 5px;
+        border-left: 4px solid #ff9800;
+        font-style: italic;
+        color: #333;
+        display: none;
+      }
+      .nav-links {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .nav-links a {
+        color: #4a86e8;
+        text-decoration: none;
+        margin: 0 10px;
+      }
+      .nav-links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav-links">
+        <a href="index.html">Availability Scheduler</a>
+        <a href="memory.html">Memory Lane</a>
+        <a href="tinder.html">Lonely Hearts</a>
+      </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const scheduler = document.getElementById('scheduler');
-      const messageBox = document.getElementById('message-box');
-      const specialMessage = document.getElementById('special-message');
-      const checkBtn = document.getElementById('check-btn');
-      
-      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const startHour = 12; // Changed from 9 to 12
-      const endHour = 21;
-      
-      // Create the time grid
-      for (let hour = startHour; hour <= endHour; hour++) {
-        const timeText = hour > 12 ? `${hour - 12}:00 PM` : (hour === 12 ? '12:00 PM' : `${hour}:00 AM`);
-        
-        const timeSlot = document.createElement('div');
-        timeSlot.className = 'time-slot';
-        timeSlot.textContent = timeText;
-        scheduler.appendChild(timeSlot);
-        
-        for (let day = 0; day < days.length; day++) {
-          const cell = document.createElement('div');
-          cell.className = 'availability-cell';
-          
-          // Highlight Saturday 6-9 PM slots as special (day 5, hours 18-21)
-          if (day === 5 && (hour >= 18 && hour <= 21)) {
-            cell.classList.add('special-time');
-          }
-          
-          cell.dataset.day = day;
-          cell.dataset.hour = hour;
-          
-          // For special Saturday evening slots, show a different message
-          if (day === 5 && (hour >= 18 && hour <= 21)) {
-            cell.addEventListener('click', function(e) {
-              e.preventDefault();
-              messageBox.style.display = 'none';
-              specialMessage.textContent = "Actually, I have an exciting plan then, I better not mark it as available.";
-              specialMessage.style.display = 'block';
-              
-              // Hide the message after 3 seconds
-              setTimeout(() => {
-                specialMessage.style.display = 'none';
-              }, 3000);
-            });
-          } else {
-            cell.addEventListener('click', toggleAvailability);
-          }
-          
-          scheduler.appendChild(cell);
-        }
-      }
-      
-      function toggleAvailability(event) {
-        const cell = event.target;
-        cell.classList.toggle('available');
-        specialMessage.style.display = 'none';
-      }
-      
-      // Array of lonely, self-deprecating internal monologue prompts
-      const lonelyThoughts = [
-        "Hmm, {day} at {time}... I'll just be sitting alone in my apartment again.",
-        "{day} {time}? That's when everyone else is probably out having fun together.",
-        "Another empty slot on {day} at {time}. I used to have plans during this time.",
-        "{day} at {time} - I could text someone, but they probably wouldn't respond anyway.",
-        "{day} {time}... I remember when my calendar used to be full of actual plans.",
-        "Nothing for {day} at {time}. Not like anyone would invite me to anything then.",
-        "{day} {time} - that's when I used to meet up with my college friends. They've all moved on.",
-        "Empty {day} at {time}. Maybe I should get a pet just to have someone to come home to.",
-        "{day} {time} is when that show I watch alone every week airs. At least the TV characters feel like friends.",
-        "I could pretend to be busy on {day} at {time}, but who would even ask?",
-        "{day} at {time}? That's when my old friend group meets up now. Without me.",
-        "Empty slot on {day} {time}. I should probably call my parents, it's been weeks.",
-        "{day} at {time} - I used to have a standing coffee date then. Three years ago now.",
-        "My {day} {time} is pathetically empty. As usual.",
-        "Another lonely {day} at {time}. Maybe I'll rewatch that series for the fifth time.",
-        "{day} {time} - I used to have lunch with my high school friends then. Wonder if they ever think of me."
-      ];
-      
-      // Check incomplete schedule and display messages
-      checkBtn.addEventListener('click', function() {
-        specialMessage.style.display = 'none';
-        const cells = document.querySelectorAll('.availability-cell');
-        const unselectedCells = [];
-        
-        cells.forEach(cell => {
-          if (!cell.classList.contains('available')) {
-            const day = parseInt(cell.dataset.day);
-            const hour = parseInt(cell.dataset.hour);
-            
-            // Skip Saturday 6-9 PM (day 5, hours 18-21)
-            if (!(day === 5 && hour >= 18 && hour <= 21)) {
-              unselectedCells.push({
-                day: day,
-                hour: hour
+      <h1>My Weekly Availability</h1>
+
+      <div class="instructions">
+        <p>
+          Click on the time slots when you're available. Click again to mark as
+          unavailable.
+        </p>
+      </div>
+
+      <div class="grid-container" id="scheduler">
+        <div class="grid-header">Time</div>
+        <div class="grid-header">Monday</div>
+        <div class="grid-header">Tuesday</div>
+        <div class="grid-header">Wednesday</div>
+        <div class="grid-header">Thursday</div>
+        <div class="grid-header">Friday</div>
+        <div class="grid-header">Saturday</div>
+
+        <!-- Time slots will be added here by JavaScript -->
+      </div>
+
+      <div id="message-box" class="message-box"></div>
+      <div id="special-message" class="special-message"></div>
+
+      <button class="submit-btn" id="check-btn">Check My Schedule</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const scheduler = document.getElementById("scheduler");
+        const messageBox = document.getElementById("message-box");
+        const specialMessage = document.getElementById("special-message");
+        const checkBtn = document.getElementById("check-btn");
+
+        const days = [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ];
+        const startHour = 12;
+        const endHour = 21;
+
+        // Add drag selection state variables
+        let isDragging = false;
+        let isSelectingAvailable = false;
+
+        // Create the time grid
+        for (let hour = startHour; hour <= endHour; hour++) {
+          const timeText =
+            hour > 12
+              ? `${hour - 12}:00 PM`
+              : hour === 12
+              ? "12:00 PM"
+              : `${hour}:00 AM`;
+
+          const timeSlot = document.createElement("div");
+          timeSlot.className = "time-slot";
+          timeSlot.textContent = timeText;
+          scheduler.appendChild(timeSlot);
+
+          for (let day = 0; day < days.length; day++) {
+            const cell = document.createElement("div");
+            cell.className = "availability-cell";
+
+            // Highlight Saturday 6-9 PM slots as special (day 5, hours 18-21)
+            if (day === 5 && hour >= 18 && hour <= 21) {
+              cell.classList.add("special-time");
+            }
+
+            cell.dataset.day = day;
+            cell.dataset.hour = hour;
+
+            // For special Saturday evening slots, show a different message
+            if (day === 5 && hour >= 18 && hour <= 21) {
+              cell.addEventListener("click", function (e) {
+                e.preventDefault();
+                messageBox.style.display = "none";
+                specialMessage.textContent =
+                  "Actually, I have an exciting plan then, I better not mark it as available.";
+                specialMessage.style.display = "block";
+
+                // Hide the message after 3 seconds
+                setTimeout(() => {
+                  specialMessage.style.display = "none";
+                }, 3000);
               });
+            } else {
+              cell.addEventListener("click", toggleAvailability);
+            }
+
+            scheduler.appendChild(cell);
+          }
+        }
+
+        function toggleAvailability(event) {
+          const cell = event.target;
+          if (!cell.classList.contains("special-time")) {
+            cell.classList.toggle("available");
+            specialMessage.style.display = "none";
+          }
+        }
+
+        // Add mouse event handlers for drag selection
+        document.addEventListener("mousedown", function (e) {
+          const cell = e.target;
+          if (cell.classList.contains("availability-cell")) {
+            isDragging = true;
+            // Determine if we're selecting or deselecting based on initial cell
+            isSelectingAvailable = !cell.classList.contains("available");
+            toggleAvailability(e);
+          }
+        });
+
+        document.addEventListener("mousemove", function (e) {
+          if (isDragging) {
+            const cell = e.target;
+            if (cell.classList.contains("availability-cell")) {
+              if (!cell.classList.contains("special-time")) {
+                // Set the cell's state based on what we're doing (selecting or deselecting)
+                if (isSelectingAvailable) {
+                  cell.classList.add("available");
+                } else {
+                  cell.classList.remove("available");
+                }
+              }
             }
           }
         });
-        
-        if (unselectedCells.length === 0) {
-          messageBox.textContent = "I've marked every slot as available... who am I kidding? No one's going to invite me to anything anyway. At least I have Saturday night.";
-          messageBox.style.display = 'block';
-          return;
-        }
-        
-        // Pick a random unselected cell to ask about
-        const randomIndex = Math.floor(Math.random() * unselectedCells.length);
-        const cell = unselectedCells[randomIndex];
-        const dayName = days[cell.day];
-        const hourText = cell.hour > 12 ? `${cell.hour - 12}:00 PM` : (cell.hour === 12 ? '12:00 PM' : `${cell.hour}:00 AM`);
-        
-        // Pick a random prompt and fill in the details
-        const promptIndex = Math.floor(Math.random() * lonelyThoughts.length);
-        let prompt = lonelyThoughts[promptIndex]
-          .replace('{day}', dayName)
-          .replace('{time}', hourText);
-        
-        messageBox.textContent = prompt;
-        messageBox.style.display = 'block';
-        
-        // Highlight the cell being asked about
-        cells.forEach(c => c.style.border = '1px solid #ddd');
-        const targetCell = document.querySelector(`.availability-cell[data-day="${cell.day}"][data-hour="${cell.hour}"]`);
-        targetCell.style.border = '2px solid #808080';
+
+        document.addEventListener("mouseup", function () {
+          isDragging = false;
+        });
+
+        // Prevent text selection while dragging
+        scheduler.addEventListener("selectstart", function (e) {
+          if (isDragging) {
+            e.preventDefault();
+          }
+        });
+
+        // Array of lonely, self-deprecating internal monologue prompts
+        const lonelyThoughts = [
+          "Hmm, {day} at {time}... I'll just be bedrotting in my room again.",
+          "{day} {time}? That's when my Freshman year friends are probably out having fun together.",
+          "Another empty slot on {day} at {time}. I wonder if she still thinks about me.",
+          "{day} at {time} - I could text Owen, but he probably wouldn't respond.",
+          "Nothing for {day} at {time}. Not like anyone would invite me to anything then.",
+          "{day} {time} - that's when I used to meet up with my soccer friends.",
+          "Empty {day} at {time}. I would get a guinea pig but I'm sure it would die horribly.",
+          "{day} {time} is when I watch Seinfeld. At least Jerry and George feel like friends.",
+          "I could pretend to be busy on {day} at {time}, but who would even ask?",
+          "{day} at {time}? That's when my old friend group meets up now. Without me.",
+          "Empty slot on {day} {time}. I should probably call Mom, it's been months.",
+          "{day} at {time} - I used to have a standing coffee date then. Three years ago now.",
+          "My {day} {time} is pathetically empty. As usual. Guess I'll just watch Seinfeld again.",
+          "Another lonely {day} at {time}. Maybe I'll rewatch Seinfeld for the fifth time.",
+          "{day} {time} - I used to have lunch with my high school friends then.",
+        ];
+
+        // Check incomplete schedule and display messages
+        checkBtn.addEventListener("click", function () {
+          specialMessage.style.display = "none";
+          const cells = document.querySelectorAll(".availability-cell");
+          const unselectedCells = [];
+
+          cells.forEach((cell) => {
+            if (!cell.classList.contains("available")) {
+              const day = parseInt(cell.dataset.day);
+              const hour = parseInt(cell.dataset.hour);
+
+              // Skip Saturday 6-9 PM (day 5, hours 18-21)
+              if (!(day === 5 && hour >= 18 && hour <= 21)) {
+                unselectedCells.push({
+                  day: day,
+                  hour: hour,
+                });
+              }
+            }
+          });
+
+          if (unselectedCells.length === 0) {
+            messageBox.textContent =
+              "I've marked every slot as available... who am I kidding? No one's going to invite me to anything anyway. At least I have Saturday night.";
+            messageBox.style.display = "block";
+            return;
+          }
+
+          // Pick a random unselected cell to ask about
+          const randomIndex = Math.floor(
+            Math.random() * unselectedCells.length
+          );
+          const cell = unselectedCells[randomIndex];
+          const dayName = days[cell.day];
+          const hourText =
+            cell.hour > 12
+              ? `${cell.hour - 12}:00 PM`
+              : cell.hour === 12
+              ? "12:00 PM"
+              : `${cell.hour}:00 AM`;
+
+          // Pick a random prompt and fill in the details
+          const promptIndex = Math.floor(Math.random() * lonelyThoughts.length);
+          let prompt = lonelyThoughts[promptIndex]
+            .replace("{day}", dayName)
+            .replace("{time}", hourText);
+
+          messageBox.textContent = prompt;
+          messageBox.style.display = "block";
+
+          // Highlight the cell being asked about
+          cells.forEach((c) => (c.style.border = "1px solid #ddd"));
+          const targetCell = document.querySelector(
+            `.availability-cell[data-day="${cell.day}"][data-hour="${cell.hour}"]`
+          );
+          targetCell.style.border = "2px solid #808080";
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
